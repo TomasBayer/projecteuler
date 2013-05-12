@@ -3,7 +3,7 @@ from functools import reduce
 from random import randint
 from tools import allTrue
 
-# Generatorobjekte für Zahlenfolgen
+# Generatorobjekte fuer Zahlenfolge
 def fibonacci():
 	a, b = 1, 1
 	while True:
