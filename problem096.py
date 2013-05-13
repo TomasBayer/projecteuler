@@ -11,7 +11,7 @@ for line in fgetLines("problem096"):
 		S.append([ int(c) for c in line.rstrip() ])
 sudokus.append(S)
 
-## Lösungsmethoden
+## Loesungsmethoden
 
 
 
