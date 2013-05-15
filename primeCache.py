@@ -62,6 +62,6 @@ def nextPrime(n):
 
 def nthPrime(i):
 	global P
-	for k in range(len(P),i):
+	for _ in range(i-len(P)):
 		_next()
 	return P[i-1]
