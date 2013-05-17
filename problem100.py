@@ -1,40 +1,28 @@
-from zth import froot, intRoot
+from zth import continuedFractionOfRoot, continuedFractions, generatorFromPeriod, intRoot
 
-# Let n be an integer
-#     ex a in Z, s.t. a/n * (a-1)/(n-1) = 1/2
-# <=> ex a in Z, s.t. 2a(a-1)=n(n-1)
-# <=> ex a in Z, s.t. a^2-a-(n^2-n)/2=0
-# <=> (sqrt(2n^2-2n+1) + 1) / 2 is in Z 
-# <=> 2n^2-2n+1 is an odd square
-# <=> 2n^2-2n+1 is a square
-# <=> ex c in Z, s.t.  2n^2-2n+1=c^2
-# <=> ex c in Z, s.t. n = (sqrt(2c^2-1)+1)/2
-# Let c be an integer
-#     ex n in Z, s.t. 2n^2-2n+1=c^2
-# <=> (sqrt(2c^2 - 1) + 1) / 2 is in Z
-# <=> 2c^2 - 1 is an odd square
-# <=> 2c^2 - 1 is a square
-#   { n in Z with n >= b, s. t. ex a in Z, s.t. a/n * (a-1)/(n-1) = 1/2 }
-# = { (sqrt(2c^2-1) + 1) / 2 | c in Z, 2c^2-1 is a square, 2c^2-1 > (2b-1)^2 }
-# = { (sqrt(2c^2-1) + 1) / 2 | c in Z, 2c^2-1 is a square, c > sqrt(2(b-1)(b+1)) }
+#      a/n * (a-1)/(n-1) = 1/2
+# <=>  2a^2 - 2a = n^2 - n
+# <=>  ( (2a-1)^2 - 1 ) / 2 = ( (2n-1)^2 -1 ) / 4
+# <=>  (2a-1)^2 * 2 =  (2n-1)^2 + 1 
+# <=>  (2n-1)^2 - 2*(2a-1)^2 = -1
+# <=>  x^2 - 2*y^2 = -1             (x=2n-1, y=2a-1)
 
-cache = None
-def isSquare(n):
-    global cache
-    if cache == None:
-        a = froot(n,2)
-        cache = (a,a*a)
-    while n > cache[1]:
-        cache = ( cache[0] + 1, cache[1] + 2*cache[0] + 1 )
-    return n == cache[1]
+# Pellsche Gleichung. Periodenlaenge von sqrt(2) ist 1.
+# Loesungen sind also Kettenbrueche (p_i,q_i) von sqrt(2) mit i ungerade.
+# Fuer alle Loesungen (x,y) sind x und y ungerade.
 
 b = 10**12
-c = froot(2*(b-1)*(b+1), 2)
-a = 2*c*c-1
-while True:
-    r = intRoot(a, 2)
-    if r:
-        print (r + 1) // 2
+
+# n > b <=> x > 2b-1
+
+b = 2*b-1
+skip = True
+for (p,q) in continuedFractions(generatorFromPeriod(continuedFractionOfRoot(2))):
+    skip = not skip
+    if skip:
+        continue
+    if p > b:
+        n = (p + 1) // 2
+        b = ( intRoot(2*n*(n-1)+1,2) + 1 ) // 2
+        print b
         break
-    a += 4*c + 2
-    c += 1

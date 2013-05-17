@@ -186,7 +186,7 @@ def continuedFractionOfRoot(N):
 			F.append(i[0])
 		else:
 			L.append(i[0])
-	return((L,F))
+	return (L,F)
 	
 # Effizientes Rechnen in Zp
 def ggt(a,b):
