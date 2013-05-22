@@ -1,42 +1,37 @@
-from zth import rp, isProbablePrime
+from zth import rp, isProbablePrime, integersModulo, chinaRest
+from primeCache import primes
 
-max = 150 * 10**2
+max = 150 * 10**6
 
 def set(n):
     s = n*n
     return map(lambda x: s + x, [1,3,7,9,13,27])
 
-m = 2
-residues = []
-for i in range(m):
-    for r in set(i):
-        if not rp(r,m):
-            break
-    else:
-        residues.append(i)
+k = 10
+dic = {}
+for n in primes():
+    T = []
+    for i in range(n):
+        for r in set(i):
+            if not rp(r,n):
+                break
+        else:
+            T.append(i)
+    dic[n] = T
+    k -= 1
+    if k == 0:
+        break
 
-steps = []
-for i in range(1,len(residues)):
-    steps.append(residues[i]-residues[i-1])
-steps.append(m+residues[0]-residues[-1])
-
-k = 0
-l = len(steps)
-n = residues[0]
-
+C = chinaRest(dic)
 candidates = []
-while True:
+for n in integersModulo(C[0], C[1]):
     for i in set(n):
         if not isProbablePrime(i,3):
             break
     else:
         candidates.append(n)
-    n += steps[k]
     if n >= max:
         break
-    k += 1
-    if k == l:
-        k = 0
 
 print candidates
 res = 0

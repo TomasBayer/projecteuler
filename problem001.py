@@ -1,7 +1,6 @@
-sum = 0
+n = 1000
 
-for i in range(3,1000):
-	if i % 3 == 0 or i % 5 == 0:
-		sum += i
-
-print(sum)
+n1 = n // 3
+n2 = n // 5
+n3 = n // 15
+print 3 * n1 * (n1 + 1) // 2 + 5 * n2 * (n2 + 1) // 2 - 15 * n3 * (n3 + 1) // 2

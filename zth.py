@@ -18,7 +18,27 @@ def arithmFolge(a,k):
 def geomFolge(a,k):
 	while True:
 		yield a
-		a *= k
+        a *= k
+
+def integersModulo(L, m):
+    if isinstance(L, list):
+        L.sort()
+    else:
+        L = [L]
+    l = len(L)
+    S = []
+    for i in range(1, l):
+        S.append(L[i]-L[i-1])
+    S.append(m+L[0]-L[-1])
+
+    k = 0
+    n = L[0]
+    while True:
+        yield n
+        n += S[k]
+        k += 1
+        if k == l:
+            k = 0
 
 def zahlen(a):
 	while True:
@@ -229,7 +249,23 @@ def inv(a,m):
     if r[0] != 1:
         return None
     else:
-        return ( r[1] + m ) % m
+        return rk(r[1], m)
+
+def chinaRest(cong):
+    M = reduce(lambda x,y: x*y, cong.keys())
+    s = 0
+    res = [0]
+    for m in cong:
+        mm = M // m
+        t = _inv(m, mm)[2] * mm
+        neu = []
+        if not isinstance(cong[m], list):
+            cong[m] = [cong[m]]
+        for a in cong[m]:
+            for s in res:
+                neu.append(s + a * t)
+        res = neu
+    return (map(lambda s: rk(s,M), res), M)
 
 # Primfaktorenzerlegung
 def factorize(n):
