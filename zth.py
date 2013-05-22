@@ -198,6 +198,13 @@ def ggt(a,b):
 def rp(a,b):
 	return ggt(a,b) == 1
 
+def rk(a,m):
+    a = a % m
+    if a < 0:
+        return a + m
+    else:
+        return a
+
 def kgv(a,b):
 	return a * b // ggt(a,b)
 
@@ -209,6 +216,20 @@ def sqm(a,b,m):
 		a = (a**2) % m
 		b >>= 1
 	return res
+
+def _inv(a,b):
+    if b == 0:
+        return (a,1,0)
+    else:
+        tmp = _inv(b,a%b)
+        return (tmp[0],tmp[2],tmp[1] - a // b * tmp[2])
+
+def inv(a,m):
+    r = _inv(a,m)
+    if r[0] != 1:
+        return None
+    else:
+        return ( r[1] + m ) % m
 
 # Primfaktorenzerlegung
 def factorize(n):
@@ -275,7 +296,7 @@ def isPerfect(n):
 	return summeTeiler(n) == n
 
 # Primzahltests
-def isProbablePrime(n):
+def isProbablePrime(n, rounds=20):
 	s, d = 0, n-1
 	if n < 2:
 		return False
@@ -284,7 +305,7 @@ def isProbablePrime(n):
 		s += 1
 	if not s:
 		return n == 2
-	for k in range(0,20):
+	for _ in xrange(rounds):
 		a = randint(2,n-1)
 		if not rp(a,n):
 			return False
