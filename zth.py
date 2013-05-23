@@ -18,27 +18,27 @@ def arithmFolge(a,k):
 def geomFolge(a,k):
 	while True:
 		yield a
-        a *= k
+		a *= k
 
 def integersModulo(L, m):
-    if isinstance(L, list):
-        L.sort()
-    else:
-        L = [L]
-    l = len(L)
-    S = []
-    for i in range(1, l):
-        S.append(L[i]-L[i-1])
-    S.append(m+L[0]-L[-1])
+	if isinstance(L, list):
+		L.sort()
+	else:
+		L = [L]
+	l = len(L)
+	S = []
+	for i in range(1, l):
+		S.append(L[i]-L[i-1])
+	S.append(m+L[0]-L[-1])
 
-    k = 0
-    n = L[0]
-    while True:
-        yield n
-        n += S[k]
-        k += 1
-        if k == l:
-            k = 0
+	k = 0
+	n = L[0]
+	while True:
+		yield n
+		n += S[k]
+		k += 1
+		if k == l:
+			k = 0
 
 def zahlen(a):
 	while True:
@@ -96,25 +96,25 @@ def collatz(n):
 			n = 3*n + 1
 
 def erathostenes():
-    D = { 9: 3, 25: 5 } 
-    yield 2
-    yield 3
-    yield 5
-    MASK= 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0,
-    MODULOS= frozenset( (1, 7, 11, 13, 17, 19, 23, 29) )
+	D = { 9: 3, 25: 5 } 
+	yield 2
+	yield 3
+	yield 5
+	MASK= 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0,
+	MODULOS= frozenset( (1, 7, 11, 13, 17, 19, 23, 29) )
 
-    for q in it.compress(
-            it.islice(it.count(7), 0, None, 2), 
-            it.cycle(MASK)):
-        p = D.pop(q, None)
-        if p is None:
-            D[q*q] = q 
-            yield q
-        else:
-            x = q + 2*p 
-            while x in D or (x%30) not in MODULOS:
-                x += 2*p 
-            D[x] = p   
+	for q in it.compress(
+			it.islice(it.count(7), 0, None, 2), 
+			it.cycle(MASK)):
+		p = D.pop(q, None)
+		if p is None:
+			D[q*q] = q 
+			yield q
+		else:
+			x = q + 2*p 
+			while x in D or (x%30) not in MODULOS:
+				x += 2*p 
+			D[x] = p   
 
 def numberOfIntegerPartitions():
 	C = [1]
@@ -219,11 +219,11 @@ def rp(a,b):
 	return ggt(a,b) == 1
 
 def rk(a,m):
-    a = a % m
-    if a < 0:
-        return a + m
-    else:
-        return a
+	a = a % m
+	if a < 0:
+		return a + m
+	else:
+		return a
 
 def kgv(a,b):
 	return a * b // ggt(a,b)
@@ -238,34 +238,34 @@ def sqm(a,b,m):
 	return res
 
 def _inv(a,b):
-    if b == 0:
-        return (a,1,0)
-    else:
-        tmp = _inv(b,a%b)
-        return (tmp[0],tmp[2],tmp[1] - a // b * tmp[2])
+	if b == 0:
+		return (a,1,0)
+	else:
+		tmp = _inv(b,a%b)
+		return (tmp[0],tmp[2],tmp[1] - a // b * tmp[2])
 
 def inv(a,m):
-    r = _inv(a,m)
-    if r[0] != 1:
-        return None
-    else:
-        return rk(r[1], m)
+	r = _inv(a,m)
+	if r[0] != 1:
+		return None
+	else:
+		return rk(r[1], m)
 
 def chinaRest(cong):
-    M = reduce(lambda x,y: x*y, cong.keys())
-    s = 0
-    res = [0]
-    for m in cong:
-        mm = M // m
-        t = _inv(m, mm)[2] * mm
-        neu = []
-        if not isinstance(cong[m], list):
-            cong[m] = [cong[m]]
-        for a in cong[m]:
-            for s in res:
-                neu.append(s + a * t)
-        res = neu
-    return (map(lambda s: rk(s,M), res), M)
+	M = reduce(lambda x,y: x*y, cong.keys())
+	s = 0
+	res = [0]
+	for m in cong:
+		mm = M // m
+		t = _inv(m, mm)[2] * mm
+		neu = []
+		if not isinstance(cong[m], list):
+			cong[m] = [cong[m]]
+		for a in cong[m]:
+			for s in res:
+				neu.append(s + a * t)
+		res = neu
+	return (map(lambda s: rk(s,M), res), M)
 
 # Primfaktorenzerlegung
 def factorize(n):
@@ -434,3 +434,40 @@ def fac(n):
 
 def prod(l):
 	return reduce(lambda x,y: x*y, l, 1)
+
+# Matrizen
+def madd(A,B):
+	return [ [ A[i][j] + B[i][j] for j in range(len(A[0])) ] for i in range(len(A)) ]
+
+def maddmod(A,B,m):
+	return [ [ (A[i][j] + B[i][j]) % m for j in range(len(A[0])) ] for i in range(len(A)) ]
+
+def mmul(A, B):
+	return [ [ sum([ A[i][k] * B[k][j] for k in range(len(B)) ]) for j in range(len(B[0])) ] for i in range(len(A)) ]
+
+def mmulmod(A, B, m):
+	return [ [ sum([ ( A[i][k] * B[k][j] ) % m for k in range(len(B)) ]) % m for j in range(len(B[0])) ] for i in range(len(A)) ]
+
+def mpow(A, n):
+	res = None
+	while n:
+		if n % 2 == 1:
+			if res == None:
+				res = A
+			else:
+				res = mmul(res, A)
+		A = mmul(A, A)
+		n >>= 1
+	return res
+
+def mpowmod(A, n, m):
+	res = None
+	while n:
+		if n % 2 == 1:
+			if res == None:
+				res = A
+			else:
+				res = mmulmod(res, A, m)
+		A = mmulmod(A, A, m)
+		n >>= 1
+	return res
