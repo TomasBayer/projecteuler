@@ -1,19 +1,15 @@
 from zth import sqm
 
-N = 250250
-m = 250
+N, m, M = 250250, 250, 10**16
 
 res = [0] * m
 for i in range(1,N+1):
     res[sqm(i,i,m)] += 1
-print res
 
 subsets = [0] * m
 subsets[0] = 1
 for j in range(m):
-    neu = [i for i in subsets]
-    for k in range(m):
-        neu[(j+k)%m] += res[j] * subsets[k]
-    subsets = neu
+    for _ in range(res[j]):
+        subsets = [(subsets[k] + subsets[k-j]) % M for k in range(m)]
 
-print str(subsets[0]-1)[-16:]
+print subsets[0]-1
