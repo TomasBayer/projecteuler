@@ -295,6 +295,41 @@ def factorization(n):
 			m += 1
 	yield (a,m)
 
+# Gibt eine Liste l zurueck sodass fuer alle i <= N gilt:
+#   Ist i = p_1^e_1 * ... * p_n^e_n mit p_i<p_j fuer i<j, dann ist l[i] = ( p_1, e_1, p_2^e2 * ... * p_n^e^n )
+# Damit enthaelt diese Liste also (rekursiv) alle Faktorisierungen fuer Zahlen kleiner als N
+def facsieve(N):
+    cache = [None] * (N + 1)
+    for n in xrange(2,N+1):
+        if cache[n] != None:
+            continue
+        for i in range(n, N+1, n): 
+            if cache[i] == None:
+                e, j = 0, i
+                while j % n == 0:
+                    j, e = j // n, e + 1
+                cache[i] = (n, e, j)
+    return cache
+
+# Gibt eine Wertetabelle fuer eine Funktion f aus, wobei
+#  - func = lambda p, e: f(p^e)
+#  - fold = lambda p, q, a, b: f(p*q), wobei a = f(p) und b = f(q) und (p,q) = 1 
+def coprimeFuncTable(N, func, fold):
+    table = [None] * (N + 1)
+    fact = facsieve(N)
+    for i in xrange(2, N + 1):
+        (p, e, r) = fact[i]
+        if r == 1:
+            table[i] = func(p, e) 
+        else:
+            table[i] = fold(p ** e, r, func(p, e), table[r] )
+    return table
+
+# Gibt eine Wertetabelle fuer eine multiplikative Funktion f aus, wobei
+#  - func = lambda p, e: f(p^e)
+def multFuncTable(N, func):
+    return coprimeFuncTable(N, func, lambda p, q, a, b: a*b)
+
 def phi(n):
 	r = 1
 	for p, e in factorization(n):
